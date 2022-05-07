@@ -1,3 +1,5 @@
+import random
+
 def printBoard(bo):
     for i in range(9):
         if i % 3 == 0 and i != 0:
@@ -25,7 +27,7 @@ def isValid(bo, num, pos):
 
     #Check col
     for j in range(9):
-        if bo[j][pos[1]] == num and pos[0] != i:
+        if bo[j][pos[1]] == num and pos[0] != j:
             return False
     
     #Check box
@@ -53,19 +55,38 @@ def solve(bo):
                 bo[row][col] = 0
     return False
 
+def oneBoxFilled():
+    result = [[0] * 9 for i in range(9)]
+    for i in range(3):
+        for j in range(3):
+            if result[i][j] == 0:
+                ranInt = random.randint(1, 9)
+                while not isValid(result, ranInt, (i, j)):
+                    ranInt = random.randint(1, 9)
+                result[i][j] = ranInt
+    return result
 
-board = [
-    [7, 8, 0, 4, 0, 0, 1, 2, 0],
-    [6, 0, 0, 0, 7, 5, 0, 0, 9],
-    [0, 0, 0, 6, 0, 1, 0, 7, 8],
-    [0, 0, 7, 0, 4, 0, 2, 6, 0],
-    [0, 0, 1, 0, 5, 0, 9, 3, 0],
-    [9, 0, 4, 0, 6, 0, 0, 0, 5],
-    [0, 7, 0, 3, 0, 0, 0, 1, 2],
-    [1, 2, 0, 0, 0, 7, 4, 0, 0], 
-    [0, 4, 9, 2, 0, 6, 0, 0, 7]
-]
+def generate(difficulty):
+    puzzle = oneBoxFilled()
+    solve(puzzle)
+    k = 40 # number of clues removed
+    if difficulty == 0: # Easy - 41 clues
+        k = 40
+    elif difficulty == 1: # Medium - 30 clues
+        k = 51
+    elif difficulty == 2: # Hard - 21 clues
+        k = 60
+    for i in range(k):
+        x = random.randint(0, 8)
+        y = random.randint(0, 8)
+        while puzzle[x][y] == 0:
+            x = random.randint(0, 8)
+            y = random.randint(0, 8)
+        puzzle[x][y] = 0
+    return puzzle
 
-# printBoard(board)
+board = generate(2) # Hard Difficulty
+printBoard(board)
+print("======================")
 solve(board)
 printBoard(board)
