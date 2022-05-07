@@ -1,7 +1,7 @@
 # SudokuGame
 Sudoku game built in Python, with a GUI built using Pygame.
 
-### Features:
+## Features:
 1. Generate a random Sudoku puzzle with three varying difficulties: Easy (41 clues), Medium (30 clues), Hard (21 clues)
 2. Automatically solve the Sudoku puzzle using **Backtracking algorithm**
 3. Input temporary numbers in the grid boxes before keying in
