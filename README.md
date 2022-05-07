@@ -9,7 +9,7 @@ Sudoku game built in Python, with a GUI built using Pygame.
 5. Tracks the number of wrong answers, up to a maximum of 5 strikes
 6. Timer for solving the puzzle
 
-### Controls:
+## Controls:
 * MOUSE: Select the box
 * ENTER: Key the number into the grid box
 * BACKSPACE: Delete the temporary number in the grid box
