@@ -66,22 +66,22 @@ class Grid:
     def clear(self):
         x, y = self.current
         if self.grid[x][y].value == 0:
-            self.grid[x][y].temp = 0
+            self.grid[x][y].set_temp(0)
     
     # Key in the number in the grid box, returns True if correct, False otherwise
     def enter(self, x, y):
         if self.grid[x][y].value == 0:
             val = self.grid[x][y].temp
             print(val)
-            self.grid[x][y].value = val
+            self.grid[x][y].set_value(val)
             self.board[x][y] = val
             if Sudoku.isValid(self.board, val, (x, y)) and Sudoku.solve(self.board):
-                self.grid[x][y].temp = 0
+                self.grid[x][y].set_temp(0)
                 return True
             else:
-                self.grid[x][y].value = 0
+                self.grid[x][y].set_value(0)
                 self.board[x][y] = 0
-                self.grid[x][y].temp = 0
+                self.grid[x][y].set_temp(0)
                 return False
     
     # Insert temporary number in the grid box
@@ -108,7 +108,7 @@ class Grid:
         for i in range(9):
             for j in range(9):
                 if self.grid[i][j].value == 0:
-                    self.grid[i][j].temp = self.board[i][j]
+                    self.grid[i][j].set_temp(self.board[i][j])
 
 # Box
 class Box:
@@ -119,6 +119,12 @@ class Box:
         self.gap = gap
         self.selected = False
         self.temp = 0
+
+    def set_temp(self, val):
+        self.temp = val
+
+    def set_value(self, val):
+        self.value = val
 
     # Draw the number in the grid box
     def draw(self):
@@ -187,8 +193,11 @@ def main():
         total_time = round(time.time() - start_time)
 
         for event in pygame.event.get():
+            # Exit the game
             if event.type == pygame.QUIT:
                 run = False
+            
+            # Mouse Click
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 box_selected = grid.click(pos)
@@ -196,7 +205,9 @@ def main():
                     grid.select(box_selected)
                     key = None
 
+            # Keyboard
             if event.type == pygame.KEYDOWN:
+                # Numbers
                 if event.key == pygame.K_1:
                     key = 1
                 if event.key == pygame.K_2:
@@ -215,9 +226,11 @@ def main():
                     key = 8
                 if event.key == pygame.K_9:
                     key = 9
+                # Delete temp number
                 if event.key == pygame.K_BACKSPACE:
                     grid.clear()
                     key = None
+                # Key in number
                 if event.key == pygame.K_RETURN:
                     if grid.current:
                         x, y = grid.current
@@ -228,6 +241,7 @@ def main():
                                 print("Wrong")
                                 strikes += 1
                             key = None
+                        # Puzzle finished
                         if grid.isFinished():
                             text = "You win! Game Over!"
                             print(text)
@@ -236,6 +250,7 @@ def main():
                             grid.resetBoard()
                             strikes = 0
                             start_time = time.time()
+                # Reset the puzzle
                 if event.key == pygame.K_F5:
                     text = "Game Reset"
                     print(text)
@@ -243,8 +258,10 @@ def main():
                     grid.resetBoard()
                     strikes = 0
                     start_time = time.time()
+                # Solve the puzzle
                 if event.key == pygame.K_SPACE:
                     grid.solveBoard()
+                # Generate easy puzzle
                 if event.key == pygame.K_F1: # EASY DIFFICULTY
                     text = "EASY LEVEL"
                     print(text)
@@ -254,6 +271,7 @@ def main():
                     grid.resetBoard()
                     strikes = 0
                     start_time = time.time()
+                # Generate medium puzzle
                 if event.key == pygame.K_F2: # MEDIUM DIFFICULTY
                     text = "MEDIUM LEVEL"
                     print(text)
@@ -263,6 +281,7 @@ def main():
                     grid.resetBoard()
                     strikes = 0
                     start_time = time.time()
+                # Generate hard puzzle
                 if event.key == pygame.K_F3: # HARD DIFFICULTY
                     text = "HARD LEVEL"
                     print(text)
@@ -272,10 +291,12 @@ def main():
                     grid.resetBoard()
                     strikes = 0
                     start_time = time.time()
+
         if grid.current and key:
             grid.sketch(key)
     
         draw_window(grid, strikes, total_time)
+        
         if strikes >= 5:
             text = "You lose! Game Over!"
             print(text)
