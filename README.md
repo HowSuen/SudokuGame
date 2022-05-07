@@ -8,3 +8,13 @@ Sudoku game built in Python, with a GUI built using Pygame.
 4. Reset the puzzle to its original state to retry
 5. Tracks the number of wrong answers, up to a maximum of 5 strikes
 6. Timer for solving the puzzle
+
+### Controls:
+* MOUSE: Select the box
+* ENTER: Key the number into the grid box
+* BACKSPACE: Delete the temporary number in the grid box
+* F1: Generate a new puzzle with easy difficulty (41 clues)
+* F2: Generate a new puzzle with medium difficulty (30 clues)
+* F3: Generate a new puzzle with hard difficulty (21 clues)
+* F5: Reset the current puzzle to its original state
+* SPACEBAR: Solve the puzzle using Backtracking algorithm
